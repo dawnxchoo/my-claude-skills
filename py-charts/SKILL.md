@@ -26,11 +26,12 @@ If the user provides a file or dataframe, read/inspect it. If they describe the 
 
 Present the user with palette options using AskUserQuestion. The choices are:
 
-1. **Grayscale + Blue Accent** — Clean and understated, blue highlights key findings
-2. **Corporate** — Polished and professional, consulting-deck energy (default if the user has no preference)
-3. **Bold** — High contrast, vibrant, pops on slides and social media
-4. **Soft** — Muted and approachable, great for blog posts and portfolios
-5. **Other** — Describe what you want
+1. **Modern** — Vibrant and contemporary, feels fresh and polished (default if the user has no preference)
+2. **Grayscale + Blue Accent** — Clean and understated, blue highlights key findings
+3. **Corporate** — Polished and professional, consulting-deck energy
+4. **Bold** — High contrast, vibrant, pops on slides and social media
+5. **Soft** — Muted and approachable, great for blog posts and portfolios
+6. **Other** — Describe what you want
 
 Read [references/palettes.md](references/palettes.md) for the exact hex codes and usage guidance for whichever palette is selected.
 
@@ -86,7 +87,7 @@ Apply these principles to every chart you generate. They're organized by what th
 
 - **Set figure size intentionally.** Don't use matplotlib's default (6.4x4.8). Size for the destination — wider for slides (12x6), squarer for notebooks (8x6), taller for many categories.
 - **Use `constrained_layout=True`** to prevent labels from getting clipped.
-- **Remove top and right spines** — they add visual weight without carrying information.
+- **Remove all spines** and use a rounded plot background with a subtle border for a clean, modern frame.
 - **Use small multiples** instead of cramming many series into one overloaded chart. Shared scales across panels so they're directly comparable.
 
 ### Text & Labels
@@ -95,7 +96,7 @@ Apply these principles to every chart you generate. They're organized by what th
 - **Titles should state the insight**, not describe the axes — "Sales peaked in Q3" not "Sales by Quarter". If the user hasn't specified an insight, use a descriptive title and suggest they replace it with a takeaway.
 - **Format numbers in titles the same way you'd format them on axes** — use dollar signs, percent symbols, commas, and proper spacing. Titles are natural language sentences, so numbers should read naturally.
 - **Be aware that matplotlib interprets special characters** — `$` triggers LaTeX math mode, `%` can cause string formatting issues, `_` renders as subscript, etc. When putting formatted numbers or symbols in titles, labels, or annotations, escape them or use raw strings so the text renders as intended. Always visually verify that titles display correctly.
-- **Use a readable sans-serif font** (Arial, Helvetica, DejaVu Sans) at minimum 10pt for labels, 12pt+ for titles.
+- **Use a clean sans-serif font** — set `plt.rcParams['font.family'] = 'sans-serif'` so the OS picks the best available (Helvetica on macOS, Arial on Windows, DejaVu Sans on Linux). Minimum 10pt for labels, 12pt+ for titles.
 - **Direct-label data points or bars** instead of using legends when practical — it reduces eye travel.
 - **Rotate x-axis labels only when necessary.** Prefer horizontal text, abbreviations, or switching to a horizontal bar chart.
 - **Format numbers by data type** — currency gets `$`, percentages get `%`, dates get readable formats. Only show decimal places that are meaningful. Scale to the data range: if revenue is $8K–$15K, show "$10.3K" not "$10,354.32".
@@ -111,6 +112,11 @@ Apply these principles to every chart you generate. They're organized by what th
 - **Maximize data-ink ratio** — every visual element should represent data or help interpret it. If it does neither, remove it.
 - **No gridlines.** Remove them entirely — direct labels on data points and bars make gridlines unnecessary. They add clutter without adding information.
 - **No 3D charts.** Ever. They distort perception of values.
+
+### Style
+
+- **Use rounded corners on bars** — replace `ax.bar()` with `FancyBboxPatch` rectangles using `boxstyle="round,pad=0,rounding_size=..."`. This creates a softer, more contemporary look. Adjust `rounding_size` relative to bar dimensions (typically 0.05–0.15).
+- **Use a rounded plot background** — remove all spines and add a `FancyBboxPatch` behind the axes with rounded corners and a subtle light gray border (`#E5E7EB`). This frames the chart without harsh edges.
 
 ### Scale & Accuracy
 
@@ -134,6 +140,9 @@ Every generated script should follow this general structure:
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as mticker  # if needed for formatting
+from matplotlib.patches import FancyBboxPatch
+
+plt.rcParams['font.family'] = 'sans-serif'
 
 # Data setup
 # ...
@@ -141,11 +150,19 @@ import matplotlib.ticker as mticker  # if needed for formatting
 # Create figure
 fig, ax = plt.subplots(figsize=(W, H), constrained_layout=True)
 
-# Remove top and right spines
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+# Remove all spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
 
-# Plot
+# Rounded plot background
+bg = FancyBboxPatch(
+    (0, 0), 1, 1, transform=ax.transAxes,
+    boxstyle="round,pad=0.02,rounding_size=0.03",
+    facecolor='white', edgecolor='#E5E7EB', linewidth=1, zorder=-1
+)
+ax.add_patch(bg)
+
+# Plot (for bar charts, use FancyBboxPatch for rounded bars)
 # ...
 
 # Labels, title, formatting

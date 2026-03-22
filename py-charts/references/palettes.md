@@ -2,7 +2,18 @@
 
 All palettes are colorblind-accessible (verified via perceptual distance testing across protanopia, deuteranopia, and tritanopia simulations). Every option here is safe to use. Each palette has 4 colors in priority order — if a chart only needs 2 categories, use colors 1 and 2.
 
-## 1. Grayscale + Blue Accent
+## 1. Modern (Default)
+
+Vibrant and contemporary. Feels fresh and modern — great for dashboards, social media, and any context where you want charts that pop.
+
+| Priority | Role    | Hex     |
+|----------|---------|---------|
+| 1        | Indigo  | #6366F1 |
+| 2        | Coral   | #FB923C |
+| 3        | Teal    | #2DD4BF |
+| 4        | Rose    | #F472B6 |
+
+## 2. Grayscale + Blue Accent
 
 Clean and understated. Blue highlights the key finding; grays provide context. Works well for technical reports and academic presentations.
 
@@ -13,7 +24,7 @@ Clean and understated. Blue highlights the key finding; grays provide context. W
 | 3        | Medium  | #8C8C8C |
 | 4        | Light   | #C0C0C0 |
 
-## 2. Corporate (Default)
+## 3. Corporate
 
 Polished and professional. Navy, burnt sienna, and neutral tones. Consulting-deck energy — great for stakeholder presentations and business reports.
 
@@ -24,7 +35,7 @@ Polished and professional. Navy, burnt sienna, and neutral tones. Consulting-dec
 | 3        | Neutral | #7B7D7D |
 | 4        | Dark    | #2E4053 |
 
-## 3. Bold
+## 4. Bold
 
 High contrast, vibrant. Pops on slides and social media. Good when you need maximum visual distinction between categories.
 
@@ -35,7 +46,7 @@ High contrast, vibrant. Pops on slides and social media. Good when you need maxi
 | 3        | Green   | #228833 |
 | 4        | Yellow  | #CCBB44 |
 
-## 4. Soft
+## 5. Soft
 
 Muted and approachable. Great for blog posts, portfolio pieces, and contexts where the chart should feel inviting rather than authoritative.
 
